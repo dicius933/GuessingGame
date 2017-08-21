@@ -1,9 +1,12 @@
 import java.util.Random;
 public class Jar{
-  
+
   private String itemName;
-  private int maxAmount;
+  private Integer guess = 0;
+  private int maxAmount =0;
   private int amountInJar;
+  private int attempts=0;
+
   
   public Jar(){};
     
@@ -12,13 +15,37 @@ public class Jar{
     setMaxAmount(maxAmount);
     
   }
-  
-  public void fill(int maxAmount){
-    Random random = new Random();
-    int x = random.nextInt(maxAmount + 1);
 
-    this.amountInJar  =     x;
+  private int normalizeGuess(int guess) {
+      if(guess > maxAmount ) {
+          throw new IllegalArgumentException("Your guess must be less than " + Integer.toString(maxAmount));
+      }
+      if(Integer.toString(guess).length() == 0){
+          throw new IllegalArgumentException("No number found");
+      }
+      return guess;
   }
+  public boolean applyGuess(int guess){
+    setGuess(normalizeGuess(guess));
+      if (getGuess() > amountInJar){
+          System.out.println("Your guess is too high");
+      }else if(getGuess() < amountInJar){
+          System.out.println("Your guess is too low");
+      }
+      attempts++;
+    return isWon();
+  }
+  public boolean isWon(){
+      boolean correctGuess = getGuess().intValue()== getAmountInJar();
+      return correctGuess;
+  }
+
+
+  public void fill(){
+    Random random = new Random();
+    this.amountInJar = random.nextInt(getMaxAmount() + 1);
+  }
+
   
   public String getItemName(){
     return itemName;
@@ -40,5 +67,17 @@ public class Jar{
   public void setMaxAmount(int maxAmount){
     this.maxAmount = maxAmount; 
   }
-  
+
+  public Integer getGuess() {
+        return guess;
+    }
+
+  public void setGuess(Integer guess) {
+        this.guess = guess;
+    }
+
+
+    public int getAttempts() {
+        return attempts;
+    }
 }
